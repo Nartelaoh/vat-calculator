@@ -6,7 +6,7 @@ terraform {
     } 
   } 
   backend "gcs" {
-    bucket = "<your bucket name>"
+    bucket = "qadevoprac3-lab10-tfstate-1017-2003"
     prefix = "terraform/state/lab10"
   }
 } 
@@ -18,7 +18,6 @@ provider "google" {
   project = var.gcp_project
   region = "europe-west1"
 } 
-
 resource "google_compute_instance" "docker_server" {
   name = "app-server"
   machine_type = "e2-medium"
@@ -30,26 +29,32 @@ resource "google_compute_instance" "docker_server" {
       size = 16 
     }
   }
-metadata_startup_script = <<EOF
-apt-get update
-apt-get install -y docker.io
-systemctl enable --now docker docker run -d -p 80:80 ${var.docker_registry}:latest
-EOF
 
-network_interface {
-  network = "default"
-  access_config {}
+  metadata_startup_script = <<EOF
+  apt-get update
+  apt-get install -y docker.io
+  systemctl enable --now docker
+  docker run -d -p 80:80 ${var.docker_registry}:latest
+  EOF
+
+  network_interface {
+    network = "default"
+    access_config {}
   }
 } 
 
 resource "google_compute_firewall" "default" { 
-  name = "server-firewall" 
+  name    = "server-firewall" 
   network = "default" 
   direction = "INGRESS" 
   source_ranges = ["0.0.0.0/0"] 
   
   allow { 
-    protocol = "icmp" } allow { ports = ["22", "80"] 
+    protocol = "icmp" 
+  } 
+  
+  allow { 
+    ports = ["22", "80"] 
     protocol = "tcp" 
   }
 }
