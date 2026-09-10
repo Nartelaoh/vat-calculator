@@ -6,14 +6,14 @@ pipeline {
         registry = "${dockerCreds_USR}/vatcal"
         registryCredentials = "dockerhub_login"
         dockerImage = ""
-        TF_VAR_gcp_project = "qwiklabs-gcp-03-5ea54e065fa0"
+        TF_VAR_gcp_project = "qwiklabs-gcp-03-6aee7bf7f453"
         TF_VAR_docker_registry = "${registry}"
     }
  
     stages { 
         // stage('Checkout'){ 
         //     steps { 
-        //         git url: 'https://github.com/agray998/vat-calculator.git',  
+        //         git url: 'https://github.com/Nartelaoh/vat-calculator.git',  
         //             branch: 'main' 
         //       } 
         // } 
